@@ -6,8 +6,8 @@
 
 // ──────────────── Product Data ────────────────
 const PRODUCTS = [
-  // Fruits
-  { id: 1,  name: "Fresh Apples",        category: "fruits",     emoji: "🍎", price: 149, mrp: 180, weight: "1 kg",  badge: "hot",  discount: 17 },
+  // kitchen
+  { id: 1,  name: "aata",        category: "fruits",     emoji: "🌾", price: 125, mrp: 180, weight: "5 kg",  badge: "hot",  discount: 17 },
   { id: 2,  name: "Ripe Bananas",        category: "fruits",     emoji: "🍌", price: 49,  mrp: 60,  weight: "500 g", badge: "",     discount: 18 },
   { id: 3,  name: "Juicy Mangoes",       category: "fruits",     emoji: "🥭", price: 199, mrp: 240, weight: "1 kg",  badge: "hot",  discount: 17 },
   { id: 4,  name: "Green Grapes",        category: "fruits",     emoji: "🍇", price: 129, mrp: 160, weight: "500 g", badge: "",     discount: 19 },
