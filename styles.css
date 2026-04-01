@@ -4,7 +4,7 @@
    forest green, warm cream. Syne display font.
 ═══════════════════════════════════════════════ */
 
-/* :root {
+:root {
   --saffron:   #FF6B00;
   --saffron-lt:#FF8C38;
   --green:     #1A6B3C;
@@ -19,7 +19,7 @@
   --shadow-lg: 0 12px 48px rgba(0,0,0,.14);
   --radius:    14px;
   --radius-sm: 8px;
-} */
+}
 
 /* ── Reset & Base ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
