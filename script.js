@@ -9,10 +9,10 @@ const PRODUCTS = [
   // kitchen
   { id: 1,  name: "aata",        category: "kitchen",     emoji: "🌾", price: 125, mrp: 180, weight: "5 kg",  badge: "hot",  discount: 17 },
   { id: 2,  name: "rice",        category: "kitchen",     emoji: "🍚", price: 49,  mrp: 60,  weight: "500 g", badge: "",     discount: 18 },
-  { id: 3,  name: "Juicy Mangoes",       category: "fruits",     emoji: "🥭", price: 199, mrp: 240, weight: "1 kg",  badge: "hot",  discount: 17 },
-  { id: 4,  name: "Green Grapes",        category: "fruits",     emoji: "🍇", price: 129, mrp: 160, weight: "500 g", badge: "",     discount: 19 },
-  { id: 5,  name: "Orange",              category: "fruits",     emoji: "🍊", price: 89,  mrp: 110, weight: "1 kg",  badge: "",     discount: 19 },
-  { id: 6,  name: "Watermelon",          category: "fruits",     emoji: "🍉", price: 79,  mrp: 99,  weight: "2 kg",  badge: "sale", discount: 20 },
+  { id: 3,  name: "sugar",       category: "kitchen",     emoji: "🍚 ", price: 45, mrp: 240, weight: "1 kg",  badge: "hot",  discount: 17 },
+  { id: 4,  name: "ghee",        category: "kitchen",     emoji: "🧈", price: 250, mrp: 160, weight: "500 g", badge: "",     discount: 19 },
+  { id: 5,  name: "chill",              category: "kitchen",     emoji: "🌶️", price: 89,  mrp: 110, weight: "300 gm",  badge: "",     discount: 19 },
+  { id: 6,  name: "salt",          category: "kitchen",     emoji: "🧂", price: 30,  mrp: 99,  weight: "1 kg",  badge: "sale", discount: 20 },
 
   // Vegetables
   { id: 7,  name: "Fresh Tomatoes",      category: "vegetables", emoji: "🍅", price: 39,  mrp: 55,  weight: "500 g", badge: "",     discount: 29 },
