@@ -1,15 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deepa Page</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FreshMart – Grocery Online</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 </head>
 <body>
-    <h1>Hello from Deepa</h1>
-    <p>i am deepa</p>
-    <br>
-        <script src="script.js"></script>
+
+  <!-- ═══════════════════════ HEADER ═══════════════════════ -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">🛒</span>
+        <span class="logo-text">Fresh<strong>Mart</strong></span>
+      </div>
+
+      <div class="search-bar">
+        <i class="fa fa-search search-icon"></i>
+        <input type="text" id="searchInput" placeholder="Search vegetables, fruits, dairy…" />
+        <button class="search-btn" onclick="handleSearch()">Search</button>
+      </div>
+
+      <div class="header-actions">
+        <div class="location-pill"><i class="fa fa-location-dot"></i> Delhi</div>
+        <button class="cart-btn" onclick="toggleCart()">
+          <i class="fa fa-shopping-bag"></i>
+          <span class="cart-count" id="cartCount">0</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Category Nav -->
+    <nav class="cat-nav">
+      <button class="cat-pill active" onclick="filterCategory('all', this)">All</button>
+      <button class="cat-pill" onclick="filterCategory('fruits', this)">🍎 Fruits</button>
+      <button class="cat-pill" onclick="filterCategory('vegetables', this)">🥦 Vegetables</button>
+      <button class="cat-pill" onclick="filterCategory('dairy', this)">🥛 Dairy</button>
+      <button class="cat-pill" onclick="filterCategory('grains', this)">🌾 Grains</button>
+      <button class="cat-pill" onclick="filterCategory('snacks', this)">🍿 Snacks</button>
+      <button class="cat-pill" onclick="filterCategory('beverages', this)">🧃 Beverages</button>
+    </nav>
+  </header>
+
+  <!-- ═══════════════════════ HERO ═══════════════════════ -->
+  <section class="hero">
+    <div class="hero-content">
+      <p class="hero-tag">🚀 Delivery in 20 minutes</p>
+      <h1>Fresh Groceries<br/><span>at Your Door</span></h1>
+      <p class="hero-sub">Farm-fresh produce, dairy, grains & more — delivered fast across Delhi NCR.</p>
+      <button class="hero-cta" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Shop Now →</button>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-blob"></div>
+      <div class="hero-items">
+        <span class="float-item" style="--d:0s">🥕</span>
+        <span class="float-item" style="--d:.4s">🍅</span>
+        <span class="float-item" style="--d:.8s">🥦</span>
+        <span class="float-item" style="--d:1.2s">🍋</span>
+        <span class="float-item" style="--d:1.6s">🧅</span>
+        <span class="float-item" style="--d:2s">🍇</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ OFFERS STRIP ═══════════════════════ -->
+  <div class="offers-strip">
+    <div class="offer-chip">🎉 Use code <strong>FRESH20</strong> — 20% off first order</div>
+    <div class="offer-chip">🚚 Free delivery above ₹299</div>
+    <div class="offer-chip">⚡ Express delivery available</div>
+    <div class="offer-chip">🌿 100% fresh guaranteed</div>
+  </div>
+
+  <!-- ═══════════════════════ PRODUCTS ═══════════════════════ -->
+  <main class="container" id="products">
+    <div class="section-header">
+      <h2 id="sectionTitle">All Products</h2>
+      <div class="sort-bar">
+        <label>Sort by:</label>
+        <select id="sortSelect" onchange="sortProducts()">
+          <option value="default">Default</option>
+          <option value="price-asc">Price: Low → High</option>
+          <option value="price-desc">Price: High → Low</option>
+          <option value="name">Name A–Z</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="product-grid" id="productGrid"></div>
+
+    <div class="empty-state" id="emptyState" style="display:none">
+      <div class="empty-icon">🔍</div>
+      <p>No products found. Try a different search.</p>
+      <button onclick="filterCategory('all', document.querySelector('.cat-pill'))">Back to All</button>
+    </div>
+  </main>
+
+  <!-- ═══════════════════════ CART DRAWER ═══════════════════════ -->
+  <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+  <aside class="cart-drawer" id="cartDrawer">
+    <div class="cart-header">
+      <h3>🛒 Your Cart</h3>
+      <button class="close-cart" onclick="toggleCart()"><i class="fa fa-xmark"></i></button>
+    </div>
+
+    <div class="cart-items" id="cartItems">
+      <div class="cart-empty" id="cartEmpty">
+        <div style="font-size:3rem">🛍️</div>
+        <p>Your cart is empty</p>
+        <small>Add items to get started</small>
+      </div>
+    </div>
+
+    <div class="cart-footer" id="cartFooter" style="display:none">
+      <div class="price-row"><span>Subtotal</span><span id="subtotal">₹0</span></div>
+      <div class="price-row"><span>Delivery</span><span id="deliveryFee">₹30</span></div>
+      <div class="price-row discount-row" id="discountRow" style="display:none">
+        <span>Discount (FRESH20)</span><span id="discountAmt">-₹0</span>
+      </div>
+      <div class="price-row total-row"><span>Total</span><span id="total">₹0</span></div>
+
+      <div class="coupon-box">
+        <input type="text" id="couponInput" placeholder="Enter coupon code" />
+        <button onclick="applyCoupon()">Apply</button>
+      </div>
+      <div class="coupon-msg" id="couponMsg"></div>
+
+      <button class="checkout-btn" onclick="checkout()">Proceed to Checkout →</button>
+      <button class="clear-cart-btn" onclick="clearCart()">Clear Cart</button>
+    </div>
+  </aside>
+
+  <!-- ═══════════════════════ ORDER MODAL ═══════════════════════ -->
+  <div class="modal-overlay" id="orderModal" style="display:none">
+    <div class="modal">
+      <div class="modal-icon">✅</div>
+      <h2>Order Placed!</h2>
+      <p>Thank you for shopping with FreshMart. Your order will arrive in <strong>20 minutes</strong>.</p>
+      <p class="order-id" id="orderId"></p>
+      <button onclick="closeModal()">Continue Shopping</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════ TOAST ═══════════════════════ -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ═══════════════════════ FOOTER ═══════════════════════ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="logo"><span class="logo-icon">🛒</span><span class="logo-text">Fresh<strong>Mart</strong></span></div>
+        <p>Delhi's fastest grocery delivery. Farm-fresh, always.</p>
+      </div>
+      <div class="footer-links">
+        <h4>Shop</h4>
+        <a href="#">Fruits & Vegetables</a>
+        <a href="#">Dairy & Eggs</a>
+        <a href="#">Grains & Pulses</a>
+        <a href="#">Snacks</a>
+      </div>
+      <div class="footer-links">
+        <h4>Help</h4>
+        <a href="#">Track Order</a>
+        <a href="#">Returns</a>
+        <a href="#">Contact Us</a>
+        <a href="#">FAQs</a>
+      </div>
+      <div class="footer-links">
+        <h4>Company</h4>
+        <a href="#">About Us</a>
+        <a href="#">Careers</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms</a>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2025 FreshMart. All rights reserved. Made with ❤️ in Delhi.</div>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
