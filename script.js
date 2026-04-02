@@ -37,8 +37,8 @@ const PRODUCTS = [
   { id: 20, name: "Basmati Rice",        category: "grains",     emoji: "🌾", price: 199, mrp: 240, weight: "2 kg",  badge: "hot",  discount: 17 },
   { id: 21, name: "Whole Wheat Atta",    category: "grains",     emoji: "🌿", price: 149, mrp: 180, weight: "5 kg",  badge: "",     discount: 17 },
   { id: 22, name: "Toor Dal",            category: "grains",     emoji: "🫘", price: 129, mrp: 155, weight: "1 kg",  badge: "",     discount: 16 },
-  { id: 23, name: "Moong Dal",           category: "grains",     emoji: "🟡", price: 119, mrp: 145, weight: "1 kg",  badge: "",     discount: 17 },
-  { id: 24, name: "Chana Dal",           category: "grains",     emoji: "🟤", price: 109, mrp: 130, weight: "1 kg",  badge: "sale", discount: 16 },
+  { id: 23, name: "Moong Dal", category: "grains", emoji: "🫘", price: 119, mrp: 145, weight: "1 kg",  badge: "",     discount: 17 },
+  { id: 24, name: "Chana Dal", category: "grains", emoji: "🌰", price: 109, mrp: 130, weight: "1 kg",  badge: "sale", discount: 16 },
 
   // Snacks
   { id: 25, name: "Aloo Bhujia",         category: "snacks",     emoji: "🍿", price: 49,  mrp: 60,  weight: "200 g", badge: "",     discount: 18 },
