@@ -260,16 +260,72 @@ function applyCoupon() {
 }
 
 // ──────────────── Checkout ────────────────
-function checkout() {
+async function checkout() {
   if (Object.keys(cart).length === 0) {
     showToast('Your cart is empty!')
     return
   }
-  const orderId = 'FM' + Date.now().toString().slice(-8).toUpperCase()
+
+  // Must be logged in to checkout
+  if (!currentUser) {
+    showToast('Please login to place an order 👤')
+    openAuthModal()
+    return
+  }
+
+  const ids      = Object.keys(cart).map(Number)
+  const subtotal = ids.reduce((s, id) =>
+    s + PRODUCTS.find(p => p.id === id).price * cart[id], 0)
+  const delivery = subtotal >= FREE_DELIVERY_ABOVE ? 0 : DELIVERY_FEE
+  const discount = discountApplied
+    ? Math.round(subtotal * DISCOUNT_PCT / 100) : 0
+  const total    = subtotal - discount + delivery
+
+  // Build items snapshot
+  const items = ids.map(id => {
+    const p = PRODUCTS.find(p => p.id === id)
+    return {
+      id:       p.id,
+      name:     p.name,
+      emoji:    p.emoji,
+      price:    p.price,
+      quantity: cart[id]
+    }
+  })
+
+  // Save order to Supabase
+  const { data, error } = await supabase
+    .from('orders')
+    .insert({
+      user_id:  currentUser.id,
+      items:    items,
+      subtotal: subtotal,
+      discount: discount,
+      delivery: delivery,
+      total:    total,
+      status:   'placed'
+    })
+    .select()
+    .single()
+
+  if (error) {
+    console.error('Order error:', error)
+    showToast('Failed to place order. Try again.')
+    return
+  }
+
+  // Clear Supabase cart
+  await supabase
+    .from('cart_items')
+    .delete()
+    .eq('user_id', currentUser.id)
+
+  const orderId = 'FM' + String(data.id).padStart(6, '0')
   document.getElementById('orderId').textContent = `Order ID: ${orderId}`
   document.getElementById('orderModal').style.display = 'flex'
   clearCart()
   toggleCart()
+  showToast('🎉 Order placed successfully!')
 }
 
 function closeModal() {
