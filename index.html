@@ -9,7 +9,56 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 </head>
 <body>
+<!-- ═══════════════════════ AUTH MODAL ═══════════════════════ -->
+<div class="auth-overlay" id="authOverlay" onclick="closeAuthModal()"></div>
+<div class="auth-modal" id="authModal">
 
+  <button class="auth-close" onclick="closeAuthModal()">
+    <i class="fa fa-xmark"></i>
+  </button>
+
+  <!-- Step 1: Phone number -->
+  <div id="authStepPhone">
+    <div class="auth-icon">👋</div>
+    <h3>Welcome to FreshMart</h3>
+    <p>Enter your phone number to login or create account</p>
+    <div class="auth-input-wrap">
+      <span class="auth-prefix">+91</span>
+      <input class="auth-input" type="tel" id="phoneInput"
+             placeholder="98765 43210" maxlength="10"/>
+    </div>
+    <button class="auth-submit-btn" id="sendOtpBtn" onclick="sendOTP()">
+      Send OTP →
+    </button>
+    <p class="auth-note">We'll send a 6-digit OTP to your number</p>
+  </div>
+
+  <!-- Step 2: OTP verification -->
+  <div id="authStepOTP" style="display:none">
+    <div class="auth-icon">🔐</div>
+    <h3>Enter OTP</h3>
+    <p id="otpSentMsg">OTP sent to +91 XXXXXXXXXX</p>
+    <input class="auth-input otp-input" type="number" id="otpInput"
+           placeholder="Enter 6-digit OTP"/>
+    <button class="auth-submit-btn" id="verifyOtpBtn" onclick="verifyOTP()">
+      Verify & Login →
+    </button>
+    <button class="auth-back-btn" onclick="backToPhone()">
+      ← Change number
+    </button>
+  </div>
+
+  <!-- Step 3: Logged in -->
+  <div id="authStepDone" style="display:none">
+    <div class="auth-icon">✅</div>
+    <h3>You're logged in!</h3>
+    <p id="loggedInMsg">Welcome back</p>
+    <button class="auth-submit-btn" onclick="signOut()">
+      Sign Out
+    </button>
+  </div>
+
+</div>
   <!-- ═══════════════════════ HEADER ═══════════════════════ -->
   <header class="header">
     <div class="header-inner">
