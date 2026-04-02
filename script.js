@@ -135,6 +135,7 @@ function addToCart(id) {
   updateCartUI()
   const p = PRODUCTS.find(p => p.id === id)
   showToast(`${p.emoji} ${p.name} added to cart!`)
+  saveCartToDB()
 }
 
 function changeQty(id, delta) {
@@ -142,6 +143,7 @@ function changeQty(id, delta) {
   if (cart[id] <= 0) delete cart[id]
   updateCardFooter(id)
   updateCartUI()
+  saveCartToDB()
 }
 
 function updateCardFooter(id) {
