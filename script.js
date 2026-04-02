@@ -110,9 +110,7 @@ async function loadProductsFromDB() {
 
 Create a new file called `.gitignore` in your project folder:
 ```
-# Supabase keys — never commit these
-.env
-.env.local
+
     currentSearch = e.target.value.trim().toLowerCase();
     renderProducts();
   });
