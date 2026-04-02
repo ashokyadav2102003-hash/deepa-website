@@ -66,9 +66,53 @@ const COUPON        = "FRESH20";
 const DISCOUNT_PCT  = 20;
 
 // ──────────────── Init ────────────────
-document.addEventListener("DOMContentLoaded", () => {
-  renderProducts();
+document.addEventListener("DOMContentLoaded", async () => {
+  await loadProductsFromDB()
   document.getElementById("searchInput").addEventListener("input", (e) => {
+    currentSearch = e.target.value.trim().toLowerCase()
+    renderProducts()
+  })
+  document.getElementById("searchInput").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") handleSearch()
+  })
+})
+
+async function loadProductsFromDB() {
+  const grid = document.getElementById("productGrid")
+  grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--ink-soft)">
+    <div style="font-size:2rem">⏳</div><p>Loading products...</p>
+  </div>`
+
+  const { data, error } = await supabase
+    .from('products')
+    .select('*')
+    .eq('in_stock', true)
+    .order('category')
+
+  if (error) {
+    console.error('Supabase error:', error)
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:3rem;color:red">
+      Failed to load products. Please refresh.
+    </div>`
+    return
+  }
+
+  // Replace hardcoded PRODUCTS array with live DB data
+  PRODUCTS.length = 0
+  data.forEach(p => PRODUCTS.push(p))
+  renderProducts()
+}
+```
+
+---
+
+## File 4 — Create `.gitignore` (protect your keys)
+
+Create a new file called `.gitignore` in your project folder:
+```
+# Supabase keys — never commit these
+.env
+.env.local
     currentSearch = e.target.value.trim().toLowerCase();
     renderProducts();
   });
