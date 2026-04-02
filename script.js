@@ -324,3 +324,16 @@ function showToast(msg) {
 document.getElementById('orderModal')?.addEventListener('click', function(e) {
   if (e.target === this) closeModal()
 })
+// ──────────────── Expose functions to global scope ────────────────
+window.filterCategory  = filterCategory
+window.handleSearch    = handleSearch
+window.sortProducts    = sortProducts
+window.addToCart       = addToCart
+window.changeQty       = changeQty
+window.removeFromCart  = removeFromCart
+window.clearCart       = clearCart
+window.toggleCart      = toggleCart
+window.applyCoupon     = applyCoupon
+window.checkout        = checkout
+window.closeModal      = closeModal
+window.toggleWishlist  = toggleWishlist
