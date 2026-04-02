@@ -557,3 +557,67 @@ window.sendOTP        = sendOTP
 window.verifyOTP      = verifyOTP
 window.signOut        = signOut
 window.backToPhone    = backToPhone
+
+// ──────────────── Order History ────────────────
+function openOrderHistory() {
+  document.getElementById('ordersDrawer').classList.add('open')
+  document.getElementById('ordersOverlay').classList.add('open')
+  loadOrderHistory()
+}
+
+function closeOrderHistory() {
+  document.getElementById('ordersDrawer').classList.remove('open')
+  document.getElementById('ordersOverlay').classList.remove('open')
+}
+
+async function loadOrderHistory() {
+  const list = document.getElementById('ordersList')
+  list.innerHTML = `<div class="orders-loading">⏳ Loading orders...</div>`
+
+  const { data, error } = await supabase
+    .from('orders')
+    .select('*')
+    .eq('user_id', currentUser.id)
+    .order('created_at', { ascending: false })
+
+  if (error || !data || data.length === 0) {
+    list.innerHTML = `
+      <div class="cart-empty">
+        <div style="font-size:3rem">📦</div>
+        <p>No orders yet</p>
+        <small>Your order history will appear here</small>
+      </div>`
+    return
+  }
+
+  list.innerHTML = ''
+  data.forEach(order => {
+    const date  = new Date(order.created_at).toLocaleDateString('en-IN', {
+      day: 'numeric', month: 'short', year: 'numeric',
+      hour: '2-digit', minute: '2-digit'
+    })
+    const orderId    = 'FM' + String(order.id).padStart(6, '0')
+    const itemsText  = order.items.map(i =>
+      `${i.emoji} ${i.name} × ${i.quantity}`).join(', ')
+
+    const card = document.createElement('div')
+    card.className = 'order-card'
+    card.innerHTML = `
+      <div class="order-card-header">
+        <span class="order-id-text">${orderId}</span>
+        <span class="order-status">${order.status}</span>
+      </div>
+      <div class="order-date">🕐 ${date}</div>
+      <div class="order-items-preview">${itemsText}</div>
+      <div class="order-total-row">
+        <span>Total Paid</span>
+        <span>₹${order.total}</span>
+      </div>
+    `
+    list.appendChild(card)
+  })
+}
+
+// ──────────────── Expose new functions to window ────────────────
+window.openOrderHistory  = openOrderHistory
+window.closeOrderHistory = closeOrderHistory
