@@ -337,3 +337,120 @@ window.applyCoupon     = applyCoupon
 window.checkout        = checkout
 window.closeModal      = closeModal
 window.toggleWishlist  = toggleWishlist
+
+// ──────────────── Auth State ────────────────
+let currentUser = null
+
+supabase.auth.getSession().then(({ data: { session } }) => {
+  if (session) setLoggedIn(session.user)
+})
+
+supabase.auth.onAuthStateChange((_event, session) => {
+  if (session) setLoggedIn(session.user)
+  else setLoggedOut()
+})
+
+function setLoggedIn(user) {
+  currentUser = user
+  const phone = user.phone ? user.phone.replace('+91', '') : 'User'
+  document.getElementById('loginBtnText').textContent = '👤 Hi!'
+  document.getElementById('loggedInMsg').textContent  = `Logged in as +91 ${phone}`
+  document.getElementById('authStepPhone').style.display = 'none'
+  document.getElementById('authStepOTP').style.display   = 'none'
+  document.getElementById('authStepDone').style.display  = 'block'
+}
+
+function setLoggedOut() {
+  currentUser = null
+  document.getElementById('loginBtnText').textContent    = 'Login'
+  document.getElementById('authStepPhone').style.display = 'block'
+  document.getElementById('authStepOTP').style.display   = 'none'
+  document.getElementById('authStepDone').style.display  = 'none'
+}
+
+function openAuthModal() {
+  document.getElementById('authModal').classList.add('open')
+  document.getElementById('authOverlay').classList.add('open')
+}
+
+function closeAuthModal() {
+  document.getElementById('authModal').classList.remove('open')
+  document.getElementById('authOverlay').classList.remove('open')
+}
+
+function backToPhone() {
+  document.getElementById('authStepOTP').style.display   = 'none'
+  document.getElementById('authStepPhone').style.display = 'block'
+}
+
+async function sendOTP() {
+  const phone = '+91' + document.getElementById('phoneInput').value.trim()
+  if (phone.length < 13) {
+    showToast('Please enter a valid 10-digit number')
+    return
+  }
+  const btn = document.getElementById('sendOtpBtn')
+  btn.textContent = 'Sending...'
+  btn.disabled    = true
+
+  const { error } = await supabase.auth.signInWithOtp({ phone })
+
+  btn.textContent = 'Send OTP →'
+  btn.disabled    = false
+
+  if (error) {
+    showToast('Error: ' + error.message)
+    return
+  }
+
+  document.getElementById('otpSentMsg').textContent =
+    `OTP sent to ${phone}`
+  document.getElementById('authStepPhone').style.display = 'none'
+  document.getElementById('authStepOTP').style.display   = 'block'
+  showToast('OTP sent! Check your phone 📱')
+}
+
+async function verifyOTP() {
+  const phone = '+91' + document.getElementById('phoneInput').value.trim()
+  const token = document.getElementById('otpInput').value.trim()
+
+  if (token.length !== 6) {
+    showToast('Please enter the 6-digit OTP')
+    return
+  }
+
+  const btn = document.getElementById('verifyOtpBtn')
+  btn.textContent = 'Verifying...'
+  btn.disabled    = true
+
+  const { error } = await supabase.auth.verifyOtp({
+    phone,
+    token,
+    type: 'sms'
+  })
+
+  btn.textContent = 'Verify & Login →'
+  btn.disabled    = false
+
+  if (error) {
+    showToast('Wrong OTP, please try again ❌')
+    return
+  }
+
+  closeAuthModal()
+  showToast('🎉 Login successful! Welcome to FreshMart')
+}
+
+async function signOut() {
+  await supabase.auth.signOut()
+  closeAuthModal()
+  showToast('Logged out. See you soon! 👋')
+}
+
+// ──────────────── Add new functions to window scope ────────────────
+window.openAuthModal  = openAuthModal
+window.closeAuthModal = closeAuthModal
+window.sendOTP        = sendOTP
+window.verifyOTP      = verifyOTP
+window.signOut        = signOut
+window.backToPhone    = backToPhone
