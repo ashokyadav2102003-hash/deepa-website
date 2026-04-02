@@ -232,7 +232,49 @@ function clearCart() {
   document.getElementById('couponMsg').textContent = ''
   updateCartUI()
 }
+// ──────────────── Supabase Cart Persistence ────────────────
+async function saveCartToDB() {
+  if (!currentUser) return
+  const ids = Object.keys(cart).map(Number)
 
+  // Delete existing cart first
+  await supabase
+    .from('cart_items')
+    .delete()
+    .eq('user_id', currentUser.id)
+
+  if (ids.length === 0) return
+
+  // Insert all current cart items
+  const rows = ids.map(id => ({
+    user_id:    currentUser.id,
+    product_id: id,
+    quantity:   cart[id]
+  }))
+
+  await supabase.from('cart_items').insert(rows)
+}
+
+async function loadCartFromDB() {
+  if (!currentUser) return
+
+  const { data, error } = await supabase
+    .from('cart_items')
+    .select('product_id, quantity')
+    .eq('user_id', currentUser.id)
+
+  if (error || !data) return
+
+  // Restore cart state
+  data.forEach(item => {
+    cart[item.product_id] = item.quantity
+  })
+
+  updateCartUI()
+  // Update all card footers
+  Object.keys(cart).map(Number).forEach(id => updateCardFooter(id))
+  showToast(`🛒 Cart restored (${data.length} items)`)
+}
 // ──────────────── Cart Drawer ────────────────
 function toggleCart() {
   document.getElementById('cartDrawer').classList.toggle('open')
