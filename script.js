@@ -5,6 +5,8 @@
 ═══════════════════════════════════════════════ */
 
 // ──────────────── Product Data ────────────────
+import { supabase } from './supabase.js'
+
 const PRODUCTS = [
   // kitchen
   { id: 1,  name: "aata",        category: "kitchen",     emoji: "🌾", price: 125, mrp: 180, weight: "5 kg",  badge: "hot",  discount: 17 },
