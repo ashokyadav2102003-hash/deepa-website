@@ -9,6 +9,23 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 </head>
 <body>
+  <!-- ═══════════════════════ ORDER HISTORY ═══════════════════════ -->
+<div class="cart-overlay" id="ordersOverlay" onclick="closeOrderHistory()"></div>
+<aside class="cart-drawer orders-drawer" id="ordersDrawer">
+  <div class="cart-header">
+    <h3>🧾 My Orders</h3>
+    <button class="close-cart" onclick="closeOrderHistory()">
+      <i class="fa fa-xmark"></i>
+    </button>
+  </div>
+  <div class="orders-list" id="ordersList">
+    <div class="cart-empty">
+      <div style="font-size:3rem">📦</div>
+      <p>No orders yet</p>
+      <small>Your order history will appear here</small>
+    </div>
+  </div>
+</aside>
 <!-- ═══════════════════════ AUTH MODAL ═══════════════════════ -->
 <div class="auth-overlay" id="authOverlay" onclick="closeAuthModal()"></div>
 <div class="auth-modal" id="authModal">
