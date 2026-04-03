@@ -166,11 +166,14 @@ function updateCardFooter(id) {
 function updateCartUI() {
   const ids        = Object.keys(cart).map(Number)
   const totalItems = ids.reduce((s, id) => s + cart[id], 0)
-  document.getElementById('cartCount').textContent = totalItems
 
+  const cartCountEl  = document.getElementById('cartCount')
   const cartItemsEl  = document.getElementById('cartItems')
   const cartEmptyEl  = document.getElementById('cartEmpty')
   const cartFooterEl = document.getElementById('cartFooter')
+
+  if (!cartItemsEl || !cartFooterEl || !cartEmptyEl) return
+  if (cartCountEl) cartCountEl.textContent = totalItems
 
   if (ids.length === 0) {
     cartItemsEl.innerHTML = ''
@@ -182,7 +185,11 @@ function updateCartUI() {
 
   cartEmptyEl.style.display  = 'none'
   cartFooterEl.style.display = 'flex'
-  cartItemsEl.innerHTML = ''
+
+  // Remove old cart items but keep cartEmpty element safe
+  Array.from(cartItemsEl.children).forEach(child => {
+    if (child.id !== 'cartEmpty') cartItemsEl.removeChild(child)
+  })
 
   ids.forEach(id => {
     const p   = PRODUCTS.find(p => p.id === id)
