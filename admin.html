@@ -862,11 +862,13 @@
     image_url
   }
 
-  let error
+let error
   if (editingProductId) {
-    ;({ error } = await supabase.from('products').update(payload).eq('id', editingProductId))
+    const res1 = await supabase.from('products').update(payload).eq('id', editingProductId)
+    error = res1.error
   } else {
-    ;({ error } = await supabase.from('products').insert(payload))
+    const res2 = await supabase.from('products').insert(payload)
+    error = res2.error
   }
 
   if (error) { showToast('Error: ' + error.message); return }
