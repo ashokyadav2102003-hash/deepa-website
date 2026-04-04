@@ -95,8 +95,12 @@ function createProductCard(p, index) {
 
   card.innerHTML = `
     ${p.badge ? `<div class="card-badge ${p.badge}">${p.badge === 'hot' ? '🔥 Hot' : '🏷️ Sale'}</div>` : ''}
-    <div class="card-img-wrap">
-      <span>${p.emoji}</span>
+   <div class="card-img-wrap">
+  ${p.image_url
+    ? `<img src="${p.image_url}" alt="${p.name}"
+            style="width:100%;height:100%;object-fit:cover;border-radius:0"/>`
+    : `<span>${p.emoji}</span>`
+  }
       <button class="wishlist-btn ${liked ? 'active' : ''}"
               onclick="toggleWishlist(${p.id}, this)">
         <i class="fa${liked ? 's' : 'r'} fa-heart"></i>
