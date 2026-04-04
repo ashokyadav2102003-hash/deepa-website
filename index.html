@@ -3,79 +3,70 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>gyan – Grocery Online</title>
+  <title>GyanMart – Online Shopping</title>
   <link rel="stylesheet" href="styles.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 </head>
 <body>
+
   <!-- ═══════════════════════ ORDER HISTORY ═══════════════════════ -->
-<div class="cart-overlay" id="ordersOverlay" onclick="closeOrderHistory()"></div>
-<aside class="cart-drawer orders-drawer" id="ordersDrawer">
-  <div class="cart-header">
-    <h3>🧾 My Orders</h3>
-    <button class="close-cart" onclick="closeOrderHistory()">
+  <div class="cart-overlay" id="ordersOverlay" onclick="closeOrderHistory()"></div>
+  <aside class="cart-drawer orders-drawer" id="ordersDrawer">
+    <div class="cart-header">
+      <h3>🧾 My Orders</h3>
+      <button class="close-cart" onclick="closeOrderHistory()">
+        <i class="fa fa-xmark"></i>
+      </button>
+    </div>
+    <div class="orders-list" id="ordersList">
+      <div class="cart-empty">
+        <div style="font-size:3rem">📦</div>
+        <p>No orders yet</p>
+        <small>Your order history will appear here</small>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ═══════════════════════ AUTH MODAL ═══════════════════════ -->
+  <div class="auth-overlay" id="authOverlay" onclick="closeAuthModal()"></div>
+  <div class="auth-modal" id="authModal">
+    <button class="auth-close" onclick="closeAuthModal()">
       <i class="fa fa-xmark"></i>
     </button>
-  </div>
-  <div class="orders-list" id="ordersList">
-    <div class="cart-empty">
-      <div style="font-size:3rem">📦</div>
-      <p>No orders yet</p>
-      <small>Your order history will appear here</small>
+    <div id="authStepPhone">
+      <div class="auth-icon">👋</div>
+      <h3>Welcome to GyanMart</h3>
+      <p>Enter your phone number to login or create account</p>
+      <div class="auth-input-wrap">
+        <span class="auth-prefix">+91</span>
+        <input class="auth-input" type="tel" id="phoneInput"
+               placeholder="98765 43210" maxlength="10"/>
+      </div>
+      <button class="auth-submit-btn" id="sendOtpBtn" onclick="sendOTP()">
+        Send OTP →
+      </button>
+      <p class="auth-note">We'll send a 6-digit OTP to your number</p>
+    </div>
+    <div id="authStepOTP" style="display:none">
+      <div class="auth-icon">🔐</div>
+      <h3>Enter OTP</h3>
+      <p id="otpSentMsg">OTP sent to +91 XXXXXXXXXX</p>
+      <input class="auth-input otp-input" type="number" id="otpInput"
+             placeholder="Enter 6-digit OTP"/>
+      <button class="auth-submit-btn" id="verifyOtpBtn" onclick="verifyOTP()">
+        Verify & Login →
+      </button>
+      <button class="auth-back-btn" onclick="backToPhone()">← Change number</button>
+    </div>
+    <div id="authStepDone" style="display:none">
+      <div class="auth-icon">✅</div>
+      <h3>You're logged in!</h3>
+      <p id="loggedInMsg">Welcome back</p>
+      <button class="auth-submit-btn" onclick="signOut()">Sign Out</button>
     </div>
   </div>
-</aside>
-<!-- ═══════════════════════ AUTH MODAL ═══════════════════════ -->
-<div class="auth-overlay" id="authOverlay" onclick="closeAuthModal()"></div>
-<div class="auth-modal" id="authModal">
 
-  <button class="auth-close" onclick="closeAuthModal()">
-    <i class="fa fa-xmark"></i>
-  </button>
-
-  <!-- Step 1: Phone number -->
-  <div id="authStepPhone">
-    <div class="auth-icon">👋</div>
-    <h3>Welcome to FreshMart</h3>
-    <p>Enter your phone number to login or create account</p>
-    <div class="auth-input-wrap">
-      <span class="auth-prefix">+91</span>
-      <input class="auth-input" type="tel" id="phoneInput"
-             placeholder="98765 43210" maxlength="10"/>
-    </div>
-    <button class="auth-submit-btn" id="sendOtpBtn" onclick="sendOTP()">
-      Send OTP →
-    </button>
-    <p class="auth-note">We'll send a 6-digit OTP to your number</p>
-  </div>
-
-  <!-- Step 2: OTP verification -->
-  <div id="authStepOTP" style="display:none">
-    <div class="auth-icon">🔐</div>
-    <h3>Enter OTP</h3>
-    <p id="otpSentMsg">OTP sent to +91 XXXXXXXXXX</p>
-    <input class="auth-input otp-input" type="number" id="otpInput"
-           placeholder="Enter 6-digit OTP"/>
-    <button class="auth-submit-btn" id="verifyOtpBtn" onclick="verifyOTP()">
-      Verify & Login →
-    </button>
-    <button class="auth-back-btn" onclick="backToPhone()">
-      ← Change number
-    </button>
-  </div>
-
-  <!-- Step 3: Logged in -->
-  <div id="authStepDone" style="display:none">
-    <div class="auth-icon">✅</div>
-    <h3>You're logged in!</h3>
-    <p id="loggedInMsg">Welcome back</p>
-    <button class="auth-submit-btn" onclick="signOut()">
-      Sign Out
-    </button>
-  </div>
-
-</div>
   <!-- ═══════════════════════ HEADER ═══════════════════════ -->
   <header class="header">
     <div class="header-inner">
@@ -83,25 +74,24 @@
         <span class="logo-icon">🛒</span>
         <span class="logo-text">gyan<strong>Mart</strong></span>
       </div>
-
       <div class="search-bar">
         <i class="fa fa-search search-icon"></i>
-        <input type="text" id="searchInput" placeholder="Search grocery items" />
+        <input type="text" id="searchInput" placeholder="Search products..." />
         <button class="search-btn" onclick="handleSearch()">Search</button>
       </div>
-
       <div class="header-actions">
-        <div class="location-pill"><i class="fa fa-location-dot"></i> bagawas ahiran</div>
+        <div class="location-pill">
+          <i class="fa fa-location-dot"></i> Bagawas Ahiran
+        </div>
         <button class="orders-btn" id="ordersBtn"
-        onclick="openOrderHistory()"
-        style="display:none">
-        <i class="fa fa-clock-rotate-left"></i>
-       <span>My Orders</span>
-       </button>
+                onclick="openOrderHistory()" style="display:none">
+          <i class="fa fa-clock-rotate-left"></i>
+          <span>My Orders</span>
+        </button>
         <button class="login-btn" id="loginBtn" onclick="openAuthModal()">
-        <i class="fa fa-user"></i>
-        <span id="loginBtnText">Login</span>
-        </button>  
+          <i class="fa fa-user"></i>
+          <span id="loginBtnText">Login</span>
+        </button>
         <button class="cart-btn" onclick="toggleCart()">
           <i class="fa fa-shopping-bag"></i>
           <span class="cart-count" id="cartCount">0</span>
@@ -110,34 +100,36 @@
     </div>
 
     <!-- Category Nav -->
-  <nav class="cat-nav">
-  <button class="cat-pill active" onclick="filterCategory('all', this)">All</button>
-  <button class="cat-pill" onclick="filterCategory('fruits', this)">🚿 bathroom</button>
-  <button class="cat-pill" onclick="filterCategory('vegetables', this)">🍳 kitchen</button>
-  <button class="cat-pill" onclick="filterCategory('dairy', this)">🥛 Dairy</button>
-  <button class="cat-pill" onclick="filterCategory('grains', this)">🏠 home</button>
-  <button class="cat-pill" onclick="filterCategory('snacks', this)">🍪 Snacks</button>
-  <button class="cat-pill" onclick="filterCategory('beverages', this)"> 💸 Discount</button>
-</nav>
+    <nav class="cat-nav">
+      <button class="cat-pill active" onclick="filterCategory('all', this)">All</button>
+      <button class="cat-pill" onclick="filterCategory('bathroom', this)">🚿 Bathroom</button>
+      <button class="cat-pill" onclick="filterCategory('kitchen', this)">🍳 Kitchen</button>
+      <button class="cat-pill" onclick="filterCategory('dairy', this)">🥛 Dairy</button>
+      <button class="cat-pill" onclick="filterCategory('home', this)">🏠 Home</button>
+      <button class="cat-pill" onclick="filterCategory('snacks', this)">🍪 Snacks</button>
+      <button class="cat-pill" onclick="filterCategory('discount', this)">💸 Discount</button>
+    </nav>
   </header>
 
   <!-- ═══════════════════════ HERO ═══════════════════════ -->
   <section class="hero">
     <div class="hero-content">
       <p class="hero-tag">🚀 Delivery in 20 minutes</p>
-      <h1>Fresh Groceries<br/><span>at Your Door</span></h1>
-      <p class="hero-sub">100% original product, — delivered fast near by bagawas ahiran.</p>
-      <button class="hero-cta" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Order now →</button>
+      <h1>Best Products<br/><span>at Your Door</span></h1>
+      <p class="hero-sub">100% original products — delivered fast in Bagawas Ahiran and nearby areas.</p>
+      <button class="hero-cta" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
+        Order Now →
+      </button>
     </div>
     <div class="hero-visual">
       <div class="hero-blob"></div>
       <div class="hero-items">
-        <span class="float-item" style="--d:0s">🥕</span>
-        <span class="float-item" style="--d:.4s">🍅</span>
-        <span class="float-item" style="--d:.8s">🥦</span>
-        <span class="float-item" style="--d:1.2s">🍋</span>
-        <span class="float-item" style="--d:1.6s">🧅</span>
-        <span class="float-item" style="--d:2s">🍇</span>
+        <span class="float-item" style="--d:0s">🧴</span>
+        <span class="float-item" style="--d:.4s">🍳</span>
+        <span class="float-item" style="--d:.8s">🥛</span>
+        <span class="float-item" style="--d:1.2s">🏠</span>
+        <span class="float-item" style="--d:1.6s">🍪</span>
+        <span class="float-item" style="--d:2s">💸</span>
       </div>
     </div>
   </section>
@@ -147,7 +139,7 @@
     <div class="offer-chip">🎉 Use code <strong>FRESH20</strong> — 20% off first order</div>
     <div class="offer-chip">🚚 Free delivery above ₹299</div>
     <div class="offer-chip">⚡ Express delivery available</div>
-    <div class="offer-chip">🌿 100% fresh guaranteed</div>
+    <div class="offer-chip">🌿 100% original guaranteed</div>
   </div>
 
   <!-- ═══════════════════════ PRODUCTS ═══════════════════════ -->
@@ -164,13 +156,13 @@
         </select>
       </div>
     </div>
-
     <div class="product-grid" id="productGrid"></div>
-
     <div class="empty-state" id="emptyState" style="display:none">
       <div class="empty-icon">🔍</div>
       <p>No products found. Try a different search.</p>
-      <button onclick="filterCategory('all', document.querySelector('.cat-pill'))">Back to All</button>
+      <button onclick="filterCategory('all', document.querySelector('.cat-pill'))">
+        Back to All
+      </button>
     </div>
   </main>
 
@@ -179,9 +171,10 @@
   <aside class="cart-drawer" id="cartDrawer">
     <div class="cart-header">
       <h3>🛒 Your Cart</h3>
-      <button class="close-cart" onclick="toggleCart()"><i class="fa fa-xmark"></i></button>
+      <button class="close-cart" onclick="toggleCart()">
+        <i class="fa fa-xmark"></i>
+      </button>
     </div>
-
     <div class="cart-items" id="cartItems">
       <div class="cart-empty" id="cartEmpty">
         <div style="font-size:3rem">🛍️</div>
@@ -189,7 +182,6 @@
         <small>Add items to get started</small>
       </div>
     </div>
-
     <div class="cart-footer" id="cartFooter" style="display:none">
       <div class="price-row"><span>Subtotal</span><span id="subtotal">₹0</span></div>
       <div class="price-row"><span>Delivery</span><span id="deliveryFee">₹30</span></div>
@@ -197,13 +189,11 @@
         <span>Discount (FRESH20)</span><span id="discountAmt">-₹0</span>
       </div>
       <div class="price-row total-row"><span>Total</span><span id="total">₹0</span></div>
-
       <div class="coupon-box">
-        <input type="text" id="couponInput" placeholder="Enter coupon code" />
+        <input type="text" id="couponInput" placeholder="Enter coupon code"/>
         <button onclick="applyCoupon()">Apply</button>
       </div>
       <div class="coupon-msg" id="couponMsg"></div>
-
       <button class="checkout-btn" onclick="checkout()">Proceed to Checkout →</button>
       <button class="clear-cart-btn" onclick="clearCart()">Clear Cart</button>
     </div>
@@ -214,7 +204,7 @@
     <div class="modal">
       <div class="modal-icon">✅</div>
       <h2>Order Placed!</h2>
-      <p>Thank you for shopping with FreshMart. Your order will arrive in <strong>20 minutes</strong>.</p>
+      <p>Thank you for shopping with GyanMart. Your order will arrive in <strong>20 minutes</strong>.</p>
       <p class="order-id" id="orderId"></p>
       <button onclick="closeModal()">Continue Shopping</button>
     </div>
@@ -227,15 +217,20 @@
   <footer class="footer">
     <div class="footer-inner">
       <div class="footer-brand">
-        <div class="logo"><span class="logo-icon">🛒</span><span class="logo-text">Fresh<strong>Mart</strong></span></div>
-        <p> Rajasthan's fastest grocery delivery. always.</p>
+        <div class="logo">
+          <span class="logo-icon">🛒</span>
+          <span class="logo-text">gyan<strong>Mart</strong></span>
+        </div>
+        <p>Bagawas Ahiran's fastest delivery. 100% original products, always.</p>
       </div>
       <div class="footer-links">
         <h4>Shop</h4>
-        <a href="#">grocery items</a>
-        <a href="#">sell</a>
-        <a href="#">Grains & Pulses</a>
+        <a href="#">Bathroom</a>
+        <a href="#">Kitchen</a>
+        <a href="#">Dairy</a>
+        <a href="#">Home</a>
         <a href="#">Snacks</a>
+        <a href="#">Discount</a>
       </div>
       <div class="footer-links">
         <h4>Help</h4>
@@ -252,7 +247,9 @@
         <a href="#">Terms</a>
       </div>
     </div>
-    <div class="footer-bottom">© 2025 gyan mart. All rights reserved. Made with ❤️ in Bagawas Ahiran.</div>
+    <div class="footer-bottom">
+      © 2025 GyanMart. All rights reserved. Made with ❤️ in Bagawas Ahiran.
+    </div>
   </footer>
 
   <script type="module" src="script.js"></script>
