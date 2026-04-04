@@ -769,37 +769,40 @@
   }
 
   // ──────────────── Product Modal ────────────────
-  window.openProductModal = (product = null) => {
-    editingProductId = null
-    document.getElementById('modalTitle').textContent = 'Add New Product'
-    document.getElementById('fName').value     = ''
-    document.getElementById('fCategory').value = 'fruits'
-    document.getElementById('fEmoji').value    = ''
-    document.getElementById('fPrice').value    = ''
-    document.getElementById('fMrp').value      = ''
-    document.getElementById('fWeight').value   = ''
-    document.getElementById('fBadge').value    = ''
-    document.getElementById('fDiscount').value = ''
+ window.openProductModal = (product = null) => {
+  editingProductId = null
+  document.getElementById('modalTitle').textContent = 'Add New Product'
+  document.getElementById('fName').value     = ''
+  document.getElementById('fCategory').value = 'fruits'
+  document.getElementById('fEmoji').value    = ''
+  document.getElementById('fPrice').value    = ''
+  document.getElementById('fMrp').value      = ''
+  document.getElementById('fWeight').value   = ''
+  document.getElementById('fBadge').value    = ''
+  document.getElementById('fDiscount').value = ''
+  document.getElementById('fImage').value    = ''
+  document.getElementById('imgPreview').style.display = 'none'
+  document.getElementById('imgPreview').src  = ''
 
-    if (product) {
-      editingProductId = product.id
-      document.getElementById('modalTitle').textContent = 'Edit Product'
-      document.getElementById('fName').value     = product.name
-      document.getElementById('fCategory').value = product.category
-      document.getElementById('fEmoji').value    = product.emoji
-      document.getElementById('fPrice').value    = product.price
-      document.getElementById('fMrp').value      = product.mrp
-      document.getElementById('fWeight').value   = product.weight
-      document.getElementById('fBadge').value    = product.badge || ''
-      document.getElementById('fDiscount').value = product.discount
+  if (product) {
+    editingProductId = product.id
+    document.getElementById('modalTitle').textContent = 'Edit Product'
+    document.getElementById('fName').value     = product.name
+    document.getElementById('fCategory').value = product.category
+    document.getElementById('fEmoji').value    = product.emoji
+    document.getElementById('fPrice').value    = product.price
+    document.getElementById('fMrp').value      = product.mrp
+    document.getElementById('fWeight').value   = product.weight
+    document.getElementById('fBadge').value    = product.badge || ''
+    document.getElementById('fDiscount').value = product.discount
+
+    if (product.image_url) {
+      document.getElementById('imgPreview').src          = product.image_url
+      document.getElementById('imgPreview').style.display = 'block'
     }
-
-    document.getElementById('productModal').classList.add('open')
   }
-
-  window.closeProductModal = () => {
-    document.getElementById('productModal').classList.remove('open')
-  }
+  document.getElementById('productModal').classList.add('open')
+}
 
   window.saveProduct = async () => {
     const payload = {
