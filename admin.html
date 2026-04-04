@@ -568,6 +568,17 @@
         <label>Product Name</label>
         <input type="text" id="fName" placeholder="e.g. Fresh Apples"/>
       </div>
+      <div class="form-group full">
+  <label>Product Image</label>
+  <div class="img-upload-wrap" id="imgUploadWrap">
+    <img id="imgPreview" src="" alt=""
+         style="display:none;width:80px;height:80px;
+                object-fit:cover;border-radius:10px;margin-bottom:.5rem"/>
+    <input type="file" id="fImage" accept="image/*"
+           onchange="previewImage(this)"/>
+    <p class="upload-hint">Upload JPG, PNG or WebP. Max 2MB.</p>
+  </div>
+</div>
       <div class="form-group">
         <label>Category</label>
         <select id="fCategory">
