@@ -927,30 +927,7 @@ let error
     clearTimeout(toastTimer)
     toastTimer = setTimeout(() => t.classList.remove('show'), 2800)
   }
-  .img-upload-wrap {
-  display: flex;
-  flex-direction: column;
-  gap: .4rem;
-}
-.img-upload-wrap input[type="file"] {
-  border: 2px dashed var(--border);
-  border-radius: var(--radius-sm);
-  padding: .6rem;
-  background: var(--cream-dk);
-  cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
-  font-size: .85rem;
-}
-.upload-hint {
-  font-size: .75rem;
-  color: var(--ink-soft);
-  margin: 0;
-}
-.upload-progress {
-  font-size: .82rem;
-  color: var(--green);
-  font-weight: 600;
-}
+
   window.previewImage = (input) => {
   const preview = document.getElementById('imgPreview')
   if (input.files && input.files[0]) {
