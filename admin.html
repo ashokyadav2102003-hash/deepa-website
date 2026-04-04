@@ -804,42 +804,77 @@
   document.getElementById('productModal').classList.add('open')
 }
 
-  window.saveProduct = async () => {
-    const payload = {
-      name:     document.getElementById('fName').value.trim(),
-      category: document.getElementById('fCategory').value,
-      emoji:    document.getElementById('fEmoji').value.trim(),
-      price:    parseInt(document.getElementById('fPrice').value),
-      mrp:      parseInt(document.getElementById('fMrp').value),
-      weight:   document.getElementById('fWeight').value.trim(),
-      badge:    document.getElementById('fBadge').value,
-      discount: parseInt(document.getElementById('fDiscount').value) || 0,
-      in_stock: true
-    }
+ window.saveProduct = async () => {
+  const name = document.getElementById('fName').value.trim()
+  const emoji = document.getElementById('fEmoji').value.trim()
+  const price = parseInt(document.getElementById('fPrice').value)
 
-    if (!payload.name || !payload.emoji || !payload.price) {
-      showToast('Please fill name, emoji and price')
+  if (!name || !emoji || !price) {
+    showToast('Please fill name, emoji and price')
+    return
+  }
+
+  // Handle image upload
+  let image_url = ''
+  if (editingProductId) {
+    // Keep existing image if no new file selected
+    const existingImg = document.getElementById('imgPreview').src
+    if (existingImg && !existingImg.includes('localhost')) {
+      image_url = existingImg
+    }
+  }
+
+  const fileInput = document.getElementById('fImage')
+  if (fileInput.files && fileInput.files[0]) {
+    const file     = fileInput.files[0]
+    const fileName = `${Date.now()}-${file.name.replace(/\s/g, '-')}`
+
+    showToast('⏳ Uploading image...')
+
+    const { data: uploadData, error: uploadError } = await supabase
+      .storage
+      .from('product-images')
+      .upload(fileName, file, { upsert: true })
+
+    if (uploadError) {
+      showToast('Image upload failed: ' + uploadError.message)
       return
     }
 
-    let error
-    if (editingProductId) {
-      ({ error } = await supabase
-        .from('products')
-        .update(payload)
-        .eq('id', editingProductId))
-    } else {
-      ({ error } = await supabase
-        .from('products')
-        .insert(payload))
-    }
+    const { data: urlData } = supabase
+      .storage
+      .from('product-images')
+      .getPublicUrl(fileName)
 
-    if (error) { showToast('Error: ' + error.message); return }
-
-    closeProductModal()
-    showToast(editingProductId ? '✅ Product updated!' : '✅ Product added!')
-    loadProducts()
+    image_url = urlData.publicUrl
   }
+
+  const payload = {
+    name,
+    category: document.getElementById('fCategory').value,
+    emoji,
+    price,
+    mrp:      parseInt(document.getElementById('fMrp').value),
+    weight:   document.getElementById('fWeight').value.trim(),
+    badge:    document.getElementById('fBadge').value,
+    discount: parseInt(document.getElementById('fDiscount').value) || 0,
+    in_stock: true,
+    image_url
+  }
+
+  let error
+  if (editingProductId) {
+    ;({ error } = await supabase.from('products').update(payload).eq('id', editingProductId))
+  } else {
+    ;({ error } = await supabase.from('products').insert(payload))
+  }
+
+  if (error) { showToast('Error: ' + error.message); return }
+
+  closeProductModal()
+  showToast(editingProductId ? '✅ Product updated!' : '✅ Product added!')
+  loadProducts()
+}
 
   // ──────────────── Stock Toggle ────────────────
   window.toggleStock = async (id, value) => {
