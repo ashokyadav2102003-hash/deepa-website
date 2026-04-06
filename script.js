@@ -520,34 +520,22 @@ async function sendOTP() {
 }
 
 async function verifyOTP() {
-  const phone = '+91' + document.getElementById('phoneInput').value.trim()
+  const email = document.getElementById('emailInput').value.trim()
   const token = document.getElementById('otpInput').value.trim()
-
-  if (token.length !== 6) {
-    showToast('Please enter the 6-digit OTP')
-    return
-  }
-
+  if (token.length !== 6) { showToast('Please enter the 6-digit OTP'); return }
   const btn = document.getElementById('verifyOtpBtn')
   btn.textContent = 'Verifying...'
   btn.disabled    = true
-
   const { error } = await supabase.auth.verifyOtp({
-    phone,
+    email,
     token,
-    type: 'sms'
+    type: 'email'
   })
-
   btn.textContent = 'Verify & Login →'
   btn.disabled    = false
-
-  if (error) {
-    showToast('Wrong OTP, please try again ❌')
-    return
-  }
-
+  if (error) { showToast('Wrong OTP, please try again ❌'); return }
   closeAuthModal()
-  showToast('🎉 Login successful! Welcome to FreshMart')
+  showToast('🎉 Login successful! Welcome!')
 }
 
 async function signOut() {
