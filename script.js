@@ -463,9 +463,9 @@ supabase.auth.onAuthStateChange((_event, session) => {
 
 function setLoggedIn(user) {
   currentUser = user
-  const phone = user.phone ? user.phone.replace('+91', '') : 'User'
-  document.getElementById('loginBtnText').textContent  = '👤 Hi!'
-  document.getElementById('loggedInMsg').textContent   = `Logged in as +91 ${phone}`
+  const email = user.email || 'User'
+  document.getElementById('loginBtnText').textContent    = '👤 Hi!'
+  document.getElementById('loggedInMsg').textContent     = `Logged in as ${email}`
   document.getElementById('authStepPhone').style.display = 'none'
   document.getElementById('authStepOTP').style.display   = 'none'
   document.getElementById('authStepDone').style.display  = 'block'
