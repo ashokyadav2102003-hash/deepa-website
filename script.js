@@ -498,30 +498,25 @@ function backToPhone() {
 }
 
 async function sendOTP() {
-  const phone = '+91' + document.getElementById('phoneInput').value.trim()
-  if (phone.length < 13) {
-    showToast('Please enter a valid 10-digit number')
+  const email = document.getElementById('emailInput').value.trim()
+  if (!email || !email.includes('@')) {
+    showToast('Please enter a valid email address')
     return
   }
   const btn = document.getElementById('sendOtpBtn')
   btn.textContent = 'Sending...'
   btn.disabled    = true
-
-  const { error } = await supabase.auth.signInWithOtp({ phone })
-
+  const { error } = await supabase.auth.signInWithOtp({
+    email,
+    options: { shouldCreateUser: true }
+  })
   btn.textContent = 'Send OTP →'
   btn.disabled    = false
-
-  if (error) {
-    showToast('Error: ' + error.message)
-    return
-  }
-
-  document.getElementById('otpSentMsg').textContent =
-    `OTP sent to ${phone}`
+  if (error) { showToast('Error: ' + error.message); return }
+  document.getElementById('otpSentMsg').textContent      = `OTP sent to ${email}`
   document.getElementById('authStepPhone').style.display = 'none'
   document.getElementById('authStepOTP').style.display   = 'block'
-  showToast('OTP sent! Check your phone 📱')
+  showToast('OTP sent! Check your email 📧')
 }
 
 async function verifyOTP() {
