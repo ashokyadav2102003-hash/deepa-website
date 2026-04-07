@@ -1133,3 +1133,189 @@ body {
   color: var(--ink-soft);
   font-size: .9rem;
 }
+/* ═══════════ MOBILE HEADER FIX ═══════════ */
+@media (max-width: 768px) {
+
+  /* Stack header in 2 rows */
+  .header-inner {
+    flex-wrap: wrap;
+    padding: .7rem 1rem;
+    gap: .6rem;
+  }
+
+  /* Logo stays top left */
+  .logo {
+    flex: 1;
+  }
+
+  /* Cart button stays top right */
+  .cart-btn {
+    order: 1;
+  }
+
+  /* Search bar goes full width on second row */
+  .search-bar {
+    order: 2;
+    width: 100%;
+    flex: none;
+  }
+
+  /* Hide location pill on mobile — saves space */
+  .location-pill {
+    display: none;
+  }
+
+  /* Login and Orders buttons smaller */
+  .login-btn {
+    padding: .45rem .8rem;
+    font-size: .78rem;
+  }
+
+  .orders-btn {
+    padding: .45rem .8rem;
+    font-size: .78rem;
+  }
+
+  .orders-btn span {
+    display: none;
+  }
+
+  /* Header actions row */
+  .header-actions {
+    gap: .5rem;
+  }
+
+  /* Logo text smaller */
+  .logo-text {
+    font-size: 1.1rem;
+  }
+
+  /* Search button smaller */
+  .search-btn {
+    padding: .55rem .9rem;
+    font-size: .82rem;
+  }
+
+  /* Category nav */
+  .cat-nav {
+    padding: .5rem .8rem;
+    gap: .4rem;
+  }
+
+  .cat-pill {
+    padding: .32rem .8rem;
+    font-size: .78rem;
+  }
+
+  /* Hero section */
+  .hero {
+    padding: 1.5rem 1rem;
+    margin-top: 1rem;
+  }
+
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+
+  .hero-visual {
+    display: none;
+  }
+
+  /* Offers strip */
+  .offers-strip {
+    padding: 0 1rem;
+    gap: .5rem;
+  }
+
+  .offer-chip {
+    font-size: .75rem;
+    padding: .4rem .8rem;
+  }
+
+  /* Products grid — 2 columns on mobile */
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: .8rem;
+  }
+
+  /* Product card smaller */
+  .card-img-wrap {
+    height: 120px;
+    font-size: 3.5rem;
+  }
+
+  .card-name {
+    font-size: .88rem;
+  }
+
+  .card-price {
+    font-size: 1rem;
+  }
+
+  .card-body {
+    padding: .7rem;
+  }
+
+  .card-footer {
+    padding: 0 .7rem .7rem;
+  }
+
+  .add-btn {
+    font-size: .8rem;
+    padding: .5rem;
+  }
+
+  /* Container padding */
+  .container {
+    padding: 0 .8rem;
+    margin-top: 1.5rem;
+  }
+
+  /* Cart drawer full width */
+  .cart-drawer {
+    width: 100%;
+  }
+
+  /* Footer single column */
+  .footer-inner {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .footer {
+    padding: 2rem 1rem 0;
+  }
+
+  /* Section header */
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .5rem;
+  }
+}
+
+/* ═══════════ SMALL PHONES (under 400px) ═══════════ */
+@media (max-width: 400px) {
+
+  .logo-text {
+    font-size: 1rem;
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: .6rem;
+  }
+
+  .card-img-wrap {
+    height: 100px;
+    font-size: 3rem;
+  }
+
+  .hero-content h1 {
+    font-size: 1.7rem;
+  }
+
+  .cart-drawer {
+    width: 100%;
+  }
+}
