@@ -941,6 +941,150 @@ let error
     reader.readAsDataURL(input.files[0])
   }
 }
+  /* ═══════════ ADMIN MOBILE FIX ═══════════ */
+@media (max-width: 768px) {
+
+  /* Header */
+  .admin-header {
+    padding: .8rem 1rem;
+  }
+
+  .admin-logo {
+    font-size: 1rem;
+  }
+
+  .admin-logout {
+    padding: .35rem .7rem;
+    font-size: .78rem;
+  }
+
+  /* Stats bar */
+  .stats-bar {
+    grid-template-columns: repeat(2, 1fr);
+    padding: .8rem 1rem;
+    gap: .6rem;
+  }
+
+  .stat-card {
+    padding: .8rem;
+    gap: .6rem;
+  }
+
+  .stat-icon {
+    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+  }
+
+  .stat-info h3 {
+    font-size: 1.2rem;
+  }
+
+  /* Tabs */
+  .admin-tabs {
+    padding: 0 1rem;
+  }
+
+  .tab-btn {
+    padding: .6rem .9rem;
+    font-size: .85rem;
+  }
+
+  /* Content */
+  .admin-content {
+    padding: 0 1rem 3rem;
+  }
+
+  /* Table scroll on mobile */
+  .data-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Section top */
+  .section-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* ── PRODUCT MODAL MOBILE FIX ── */
+  .modal-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .modal-box {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 20px 20px 0 0;
+    max-height: 92vh;
+    padding: 1.5rem 1rem;
+    overflow-y: auto;
+  }
+
+  /* Form single column on mobile */
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-group.full {
+    grid-column: 1;
+  }
+
+  .form-group input,
+  .form-group select {
+    padding: .75rem .8rem;
+    font-size: 1rem;
+  }
+
+  /* Modal actions */
+  .modal-actions {
+    flex-direction: column;
+    gap: .6rem;
+  }
+
+  .save-btn,
+  .cancel-btn {
+    width: 100%;
+    padding: .9rem;
+    font-size: 1rem;
+  }
+
+  /* Image preview */
+  #imgPreview {
+    width: 100px !important;
+    height: 100px !important;
+  }
+
+  /* Lock screen */
+  .lock-box {
+    padding: 2rem 1.2rem;
+  }
+}
+
+/* ═══════════ SMALL PHONES ═══════════ */
+@media (max-width: 400px) {
+
+  .stats-bar {
+    grid-template-columns: 1fr 1fr;
+    gap: .5rem;
+  }
+
+  .stat-info h3 {
+    font-size: 1rem;
+  }
+
+  .tab-btn {
+    padding: .5rem .7rem;
+    font-size: .78rem;
+  }
+
+  .modal-box {
+    padding: 1.2rem .8rem;
+  }
+}
 </script>
 </body>
 </html>
