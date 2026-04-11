@@ -256,5 +256,35 @@
   </footer>
 
   <script type="module" src="script.js"></script>
+  <!-- ═══════════════════════ LOCATION MODAL ═══════════════════════ -->
+<div class="auth-overlay" id="locationOverlay"></div>
+<div class="location-modal" id="locationModal" style="display:none">
+  <div class="location-icon">📍</div>
+  <h3>Check Delivery</h3>
+  <p>We deliver within 5 km of Bagawas Ahiran. Let us check if we deliver to your area.</p>
+
+  <!-- GPS option -->
+  <button class="location-gps-btn" id="gpsBtn" onclick="detectGPS()">
+    <i class="fa fa-location-crosshairs"></i> Use My Current Location
+  </button>
+
+  <div class="location-divider">— or enter address manually —</div>
+
+  <!-- Manual option -->
+  <div class="location-input-wrap">
+    <input type="text" id="manualAddress"
+           placeholder="Enter your village / area name"
+           class="auth-input"/>
+    <button class="auth-submit-btn" onclick="checkManualAddress()">
+      Check Delivery →
+    </button>
+  </div>
+
+  <div class="location-result" id="locationResult" style="display:none"></div>
+
+  <button class="location-skip" onclick="skipLocation()">
+    Skip for now
+  </button>
+</div>
 </body>
 </html>
