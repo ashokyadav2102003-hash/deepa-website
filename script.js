@@ -767,3 +767,7 @@ function getDistanceKm(lat1, lng1, lat2, lng2) {
 // ──────────────── Expose new functions to window ────────────────
 window.openOrderHistory  = openOrderHistory
 window.closeOrderHistory = closeOrderHistory
+window.detectGPS          = detectGPS
+window.checkManualAddress = checkManualAddress
+window.skipLocation       = skipLocation
+window.closeBanner        = closeBanner
