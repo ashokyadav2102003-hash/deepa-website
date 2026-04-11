@@ -611,7 +611,154 @@ async function loadOrderHistory() {
     list.appendChild(card)
   })
 }
+// ──────────────── Delivery Location ────────────────
+const SHOP_LAT  = 27.534315
+const SHOP_LNG  = 76.071914
+const MAX_KM    = 5
+let   userInRange = null
 
+// Show location modal on page load after 2 seconds
+setTimeout(() => {
+  if (!sessionStorage.getItem('locationChecked')) {
+    openLocationModal()
+  }
+}, 2000)
+
+function openLocationModal() {
+  document.getElementById('locationModal').style.display = 'flex'
+  document.getElementById('locationOverlay').classList.add('open')
+}
+
+function closeLocationModal() {
+  document.getElementById('locationModal').style.display = 'none'
+  document.getElementById('locationOverlay').classList.remove('open')
+}
+
+function skipLocation() {
+  sessionStorage.setItem('locationChecked', 'true')
+  closeLocationModal()
+}
+
+function closeBanner() {
+  document.getElementById('deliveryBanner').style.display = 'none'
+}
+
+// ── GPS Detection ──
+function detectGPS() {
+  const btn    = document.getElementById('gpsBtn')
+  const result = document.getElementById('locationResult')
+  result.style.display  = 'block'
+  result.className      = 'location-result loading'
+  result.textContent    = '📡 Detecting your location...'
+  btn.disabled          = true
+  btn.textContent       = 'Detecting...'
+
+  if (!navigator.geolocation) {
+    result.className   = 'location-result error'
+    result.textContent = '❌ GPS not supported. Please enter address manually.'
+    btn.disabled       = false
+    btn.innerHTML      = '<i class="fa fa-location-crosshairs"></i> Use My Current Location'
+    return
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      const dist = getDistanceKm(
+        pos.coords.latitude,
+        pos.coords.longitude,
+        SHOP_LAT,
+        SHOP_LNG
+      )
+      btn.disabled  = false
+      btn.innerHTML = '<i class="fa fa-location-crosshairs"></i> Use My Current Location'
+      handleDistanceResult(dist, result)
+    },
+    (err) => {
+      result.className   = 'location-result error'
+      result.textContent = '❌ Could not get GPS. Please enter your area below.'
+      btn.disabled       = false
+      btn.innerHTML      = '<i class="fa fa-location-crosshairs"></i> Use My Current Location'
+    },
+    { timeout: 10000 }
+  )
+}
+
+// ── Manual Address Check ──
+async function checkManualAddress() {
+  const address = document.getElementById('manualAddress').value.trim()
+  const result  = document.getElementById('locationResult')
+
+  if (!address) {
+    showToast('Please enter your area name')
+    return
+  }
+
+  result.style.display = 'block'
+  result.className     = 'location-result loading'
+  result.textContent   = '🔍 Searching your location...'
+
+  try {
+    const query    = encodeURIComponent(address + ', Rajasthan, India')
+    const url      = `https://nominatim.openstreetmap.org/search?q=${query}&format=json&limit=1`
+    const response = await fetch(url)
+    const data     = await response.json()
+
+    if (!data || data.length === 0) {
+      result.className   = 'location-result error'
+      result.textContent = '❌ Area not found. Try a nearby village or city name.'
+      return
+    }
+
+    const dist = getDistanceKm(
+      parseFloat(data[0].lat),
+      parseFloat(data[0].lon),
+      SHOP_LAT,
+      SHOP_LNG
+    )
+    handleDistanceResult(dist, result)
+
+  } catch (e) {
+    result.className   = 'location-result error'
+    result.textContent = '❌ Could not check location. Please try again.'
+  }
+}
+
+// ── Distance Result Handler ──
+function handleDistanceResult(dist, resultEl) {
+  sessionStorage.setItem('locationChecked', 'true')
+  const banner = document.getElementById('deliveryBanner')
+  const msg    = document.getElementById('deliveryBannerMsg')
+  const km     = dist.toFixed(1)
+
+  if (dist <= MAX_KM) {
+    userInRange            = true
+    resultEl.className     = 'location-result success'
+    resultEl.textContent   = `✅ Great! We deliver to your area (${km} km away)`
+    banner.style.display   = 'block'
+    banner.classList.remove('outside')
+    msg.textContent        = `✅ We deliver to your area — ${km} km from our shop`
+    setTimeout(closeLocationModal, 2000)
+  } else {
+    userInRange            = false
+    resultEl.className     = 'location-result error'
+    resultEl.textContent   = `❌ Sorry! You are ${km} km away. We deliver within ${MAX_KM} km only.`
+    banner.style.display   = 'block'
+    banner.classList.add('outside')
+    msg.textContent        = `❌ Outside delivery area — ${km} km from our shop (max ${MAX_KM} km)`
+  }
+}
+
+// ── Haversine Distance Formula ──
+function getDistanceKm(lat1, lng1, lat2, lng2) {
+  const R    = 6371
+  const dLat = (lat2 - lat1) * Math.PI / 180
+  const dLng = (lng2 - lng1) * Math.PI / 180
+  const a    = Math.sin(dLat/2) * Math.sin(dLat/2) +
+               Math.cos(lat1 * Math.PI / 180) *
+               Math.cos(lat2 * Math.PI / 180) *
+               Math.sin(dLng/2) * Math.sin(dLng/2)
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
+}
 // ──────────────── Expose new functions to window ────────────────
 window.openOrderHistory  = openOrderHistory
 window.closeOrderHistory = closeOrderHistory
