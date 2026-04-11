@@ -315,12 +315,17 @@ function applyCoupon() {
 }
 
 // ──────────────── Checkout ────────────────
-async function checkout() {
-  if (Object.keys(cart).length === 0) {
-    showToast('Your cart is empty!')
+if (!currentUser) {
+    showToast('Please login to place an order 👤')
+    openAuthModal()
     return
   }
-
+// Block checkout if outside delivery area
+  if (userInRange === false) {
+    showToast('❌ Sorry! We do not deliver to your area.')
+    openLocationModal()
+    return
+  }
   // Must be logged in to checkout
   if (!currentUser) {
     showToast('Please login to place an order 👤')
