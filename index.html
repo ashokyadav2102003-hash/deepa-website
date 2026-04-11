@@ -9,7 +9,13 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 </head>
 <body>
-
+<!-- ═══════════════════════ DELIVERY CHECK BANNER ═══════════════════════ -->
+<div class="delivery-banner" id="deliveryBanner" style="display:none">
+  <div class="delivery-banner-inner">
+    <span id="deliveryBannerMsg">📍 Checking your location...</span>
+    <button class="delivery-banner-close" onclick="closeBanner()">✕</button>
+  </div>
+</div>
   <!-- ═══════════════════════ ORDER HISTORY ═══════════════════════ -->
   <div class="cart-overlay" id="ordersOverlay" onclick="closeOrderHistory()"></div>
   <aside class="cart-drawer orders-drawer" id="ordersDrawer">
